@@ -21,10 +21,10 @@ io.on('connection', socket => {
 
     socket.emit('msgAnterios', msg);
 
-    socket.on('tstProJeffersonVer', data => {
+    socket.on('sendMsg', data => {
         msg.push(data);
         socket.broadcast.emit('valorRecebido', data);
     })
 })
 
-server.listen(3000)
+server.listen(8080)
