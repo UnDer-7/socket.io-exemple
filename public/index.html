@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat da basis</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <form id="chat">
+        <input type="text" name="username" placeholder="Sua Msg">
+        <div class="messages"></div>
+        <button type="submit">enviar</button>
+    </form>
+    <script type="text/javascript">
+        var socket = io('http://192.168.42.75:3000');
+        
+        function renderMsg(msg) {
+            $('.messages').append('<div class="message"><strong>' + msg.author + '</strong> </div>')
+        }
+        
+        socket.on('msgAnterios', function(msgs) {
+            for (msg of msgs) {
+                renderMsg(msg);
+            }
+        });
+
+        socket.on('valorRecebido', function(msg) {
+            renderMsg(msg)
+        });
+
+        $('#chat').submit(function(event) {
+            event.preventDefault();
+
+            var author = $('input[name=username]').val();
+            var password = $('input[name=password]').val();
+
+            // if (author.lenght && password.lenght) {
+                var msgObj = {
+                    author: author,
+                    password: password,
+                };
+
+                renderMsg(msgObj);
+                socket.emit('tstProJeffersonVer', msgObj);
+
+            // }
+        });
+    </script>
+</body>
+</html>
